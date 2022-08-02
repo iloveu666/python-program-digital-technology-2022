@@ -1,32 +1,28 @@
 import sys
 from os import path
-from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QLabel, QMessageBox, QMainWindow
+
+from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QLabel, QMessageBox, QMainWindow, \
+    QTextBrowser
 from PyQt5.QtGui import QIcon
 from PyQt5.uic.properties import QtWidgets, QtCore, QtGui
 from pathlib import Path
-from notes import Note_Window
-from signup import Signup_Window
-from password import Forgo_Pass_Window
+import manual
 
-
-class Window(QMainWindow):
+class Forgo_Pass_Window(QMainWindow):
     def __init__(self):
         super().__init__()
-
-        self.new_signup_window = None
-        self.new_forgo_pass_window = None
-        self.note_window = None
-
         # ====== window properties ======
-        self.setWindowTitle("Login")
-        self.resize(710, 632)
-        self.setStyleSheet("background-color:#ffffff;")
+        self.setWindowTitle("Forgot Password ? ")
+        self.resize(600, 500)
+        self.setStyleSheet("backound-color: #ffffff")
 
-        self.login_label = QLabel(self)
-        self.login_label.move(100, 100)
-        self.login_label.setText("Log In")
-        self.login_label.setStyleSheet("font-size:24px")
+        self.reset_label = QLabel(self)
+        self.reset_label.move(100, 110)
+        self.reset_label.setText("Find Password")
+        self.reset_label.setFixedWidth(400)
+        self.reset_label.setStyleSheet("font-size:24px;")
 
+        #  ====== email, name and password input ======
         self.email_input = QLineEdit(self)
         self.email_input.move(100, 170)
         self.email_input.resize(260, 45)
@@ -35,131 +31,84 @@ class Window(QMainWindow):
             "background:#ffffff; border:1px solid #a9a9a9;border-radius:3px;font-size:18px;")
         self.email_input.setFocus()
 
-        self.password_input = QLineEdit(self)
-        self.password_input.move(100, 250)
-        self.password_input.resize(260, 45)
-        self.password_input.setPlaceholderText("Password")
-        self.password_input.setStyleSheet(
-            "background:#ffffff; border:1px solid #a9a9a9;border-radius:3px;font-size:18px;")
-        self.password_input.setFocus()
-
-        self.button_1 = QPushButton("Log In", self)
-        self.button_1.move(100, 330)
+        self.button_1 = QPushButton("Find", self)
+        self.button_1.move(100, 300)
         self.button_1.resize(190, 40)
         self.button_1.setStyleSheet("background:#008b8b; font-size:19px; color:#ffffff; border-radius:3px;")
-        self.button_1.clicked.connect(self.login_action)
+        self.button_1.clicked.connect(self.find_account)
 
-        self.button_2 = QPushButton("Sign Up", self)
-        self.button_2.move(360, 330)
-        self.button_2.resize(190, 40)
-        self.button_2.setStyleSheet("background:#008b8b; font-size:19px;color:#ffffff; border-radius:3px;")
-        self.button_2.clicked.connect(self.create_signup_window)
-
-        self.button_3 = QPushButton("Forgot Password", self)
-        self.button_3.move(100, 410)
-        self.button_3.resize(190, 40)
-        self.button_3.setStyleSheet("background:#008b8b; font-size:19px;color:#ffffff; border-radius:3px;")
-        self.button_3.clicked.connect(self.create_forgot_password_window)
-
+        # ======  initialize alert message box ======
         self.alert_message = QMessageBox()
 
-        self.email_input_value = ""
-        self.password_input_value = ""
-
-    def create_signup_window(self):
-        self.new_signup_window = Signup_Window()
-        self.new_signup_window.show()
-
-    def create_forgot_password_window(self):
-        self.new_forgo_pass_window = Forgo_Pass_Window()
-        self.new_forgo_pass_window.show()
-
-    def login_action(self):
-        # ====== error logs ======
+    def find_account(self):
+        # ====== get input values ======
+        self.error = ""
         self.error_flag = False
         self.null_error = False
-        self.authentication_error = True
-        self.file_error = False
-        self.error = ""
+        self.user_found_error = True
+        self.email_validation_error = False
+        self.valid_email = None
 
-        self.user_data_file = None
-        self.append_file = None
-        self.read_file = None
-        self.file_data = None
-        self.data_line_split = None
-        self.create_file = None
-
-        self.email_input_value = None
-        self.name_input_value = None
-        self.password_input_value = None
-
-        self.counter_one = None
-        self.counter_two = None
-
-        # ====== login data ======
         self.user_name = ""
-        self.user_email = ""
-
-        # ====== input value ======
+        self.user_password = ""
         self.email_input_value = self.email_input.text()
-        self.password_input_value = self.password_input.text()
-
-        # ====== trim value ======
         self.email_input_value = self.email_input_value.strip()
-        self.password_input_value = self.password_input_value.strip()
 
-        if (self.email_input_value == "") or (self.password_input_value == ""):
+        # ====== detect any errors ======
+        if self.email_input_value == "":
             self.error_flag = True
             self.null_error = True
 
-        if not self.null_error:
-            if Path("user_data.txt").exists():
-                with open(Path("user_data.txt"), 'r') as self.read_file:
-                    self.file_data = self.read_file.read().replace('\n', '')
-                    self.file_data = self.file_data.split(';;')
-                    self.file_data = self.file_data[:-1]
-                    for self.counter_one in self.file_data:
-                        self.data_line_split = self.counter_one.split(',,')
-                        if self.data_line_split[0] == self.email_input_value:
-                            if self.data_line_split[1] == self.password_input_value:
-                                self.authentication_error = False
-                                self.user_email = self.data_line_split[0]
-                                self.user_name = self.data_line_split[2]
-                                break
-                # ====== switching the error flag status ======
-                if self.authentication_error:
-                    self.error_flag = True
-                else:
-                     self.error_flag = False
-            # ====== creating the file ======
-            else:
-                self.create_file = open("user_data.txt", "w")
-                self.create_file.write("")
-                self.file_error = True
+        #  ====== email validation ======
+        self.valid_email = manual.email_validation()(self.email_input_value)
+        if not self.valid_email:
+            self.error_flag = True
+            self.email_validation_error = True
+
+        # ====== check if email exists or user_data file exists ======
+        if path.exists("user_data.txt"):
+            with open(Path("user_data.txt"), 'r') as self.read_file:
+                self.file_data = self.read_file.read().replace('\n', '')
+                self.file_data = self.file_data.split(';;')
+                self.file_data = self.file_data[:-1]
+                for self.counter_one in self.file_data:
+                    self.data_line_split = self.counter_one.split(',,')
+                    if self.data_line_split[0] == self.email_input_value:
+                        self.user_found_error = False
+                        self.user_password = self.data_line_split[1]
+                        self.user_name = self.data_line_split[2]
+                        break
+
+            if self.user_found_error:
                 self.error_flag = True
 
+            # ====== defining errors ======
+            if self.error_flag:
+                if self.user_found_error:
+                    self.error = "No account with this email"
+                if self.email_validation_error:
+                    self.error = "Email address is not valid"
+                if self.null_error:
+                    self.error = "Please enter your email address"
+                self.alert_message.setText(self.error)
+                self.alert_message.setWindowTitle("Error")
+                self.alert_message.exec()
 
-        if self.error_flag:
-            if self.authentication_error:
-                self.error = "Incorrect email or password"
-            if self.null_error:
-                self.error = "Please enter your email and password"
-            if self.file_error:
-                self.error = "Something went wrong"
+            else:
+                self.alert_message.setText("Hi " + self.user_name + '! your password is ' + self.user_password)
+                self.alert_message.setWindowTitle("Success")
+                self.alert_message.exec()
+                self.close()
 
-            self.alert_message.setText(self.error)
+        else:
+            self.error = "No account with this email"
             self.alert_message.setWindowTitle("Error")
             self.alert_message.exec()
-        else:
-            self.alert_message.setText("Welcome " + self.user_name)
-            self.alert_message.setWindowTitle("Success")
             self.close()
-            self.note_window = Note_Window(self.user_email, self.user_name)
-            self.note_window.show()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    gui = Window()
-    gui.show()
+    window = Forgo_Pass_Window()
+    window.show()
     app.exec_()
