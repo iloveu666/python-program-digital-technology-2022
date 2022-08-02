@@ -54,7 +54,7 @@ class Window(QMainWindow):
         self.button_2.move(360, 330)
         self.button_2.resize(190, 40)
         self.button_2.setStyleSheet("background:#008b8b; font-size:19px;color:#ffffff; border-radius:3px;")
-        self.button_2.clicked.connect(self.create_signup_window)
+        self.button_2.clicked.connect(self.new_signup_window)
 
         self.button_3 = QPushButton("Forgot Password", self)
         self.button_3.move(100, 410)
