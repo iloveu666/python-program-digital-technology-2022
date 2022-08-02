@@ -135,4 +135,4 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Signup_Window()
     window.show()
-    app.exec_()
+    app.exec_() 
