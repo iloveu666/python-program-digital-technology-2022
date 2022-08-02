@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QLabe
 from PyQt5.QtGui import QIcon
 from PyQt5.uic.properties import QtWidgets, QtCore, QtGui
 from pathlib import Path
+#from add_note import Add_Note_Window
 
 class Add_Note_Window(QMainWindow):
     def __init__(self, email, name):
