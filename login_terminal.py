@@ -10,6 +10,7 @@ from singining_up import Signup_Window
 from main import Forgo_Pass_Window
 
 
+
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -21,7 +22,7 @@ class Window(QMainWindow):
         # ====== window properties ======
         self.setWindowTitle("Login")
         self.resize(710, 632)
-        self.setStyleSheet("background-color:#ffffff;")
+        self.setStyleSheet("background-color:#black;")
 
         self.login_label = QLabel(self)
         self.login_label.move(100, 100)
@@ -47,33 +48,32 @@ class Window(QMainWindow):
         self.button_1 = QPushButton("Log In", self)
         self.button_1.move(100, 330)
         self.button_1.resize(190, 40)
-        self.button_1.setStyleSheet("background:#008b8b; font-size:19px; color:#ffffff; border-radius:3px;")
+        self.button_1.setStyleSheet("background:#CBC3E3; font-size:19px; color:#ffffff; border-radius:3px;")
         self.button_1.clicked.connect(self.login_action)
 
         self.button_2 = QPushButton("Sign Up", self)
         self.button_2.move(360, 330)
         self.button_2.resize(190, 40)
-        self.button_2.setStyleSheet("background:#008b8b; font-size:19px;color:#ffffff; border-radius:3px;")
-        self.button_2.clicked.connect(self.new_signup_window)
+        self.button_2.setStyleSheet("background:#CBC3E3; font-size:19px; color:#ffffff; border-radius:3px;")
+        self.button_2.clicked.connect(lambda: self.new_signup_window())
 
         self.button_3 = QPushButton("Forgot Password", self)
         self.button_3.move(100, 410)
         self.button_3.resize(190, 40)
-        self.button_3.setStyleSheet("background:#008b8b; font-size:19px;color:#ffffff; border-radius:3px;")
+        self.button_3.setStyleSheet("background:#CBC3E3; font-size:19px; color:#ffffff; border-radius:3px;")
         self.button_3.clicked.connect(self.create_forgot_password_window)
 
         self.alert_message = QMessageBox()
 
         self.email_input_value = ""
         self.password_input_value = ""
-
- #   def create_signup_window(self):
-    #    self.new_signup_window = Signup_Window()
-    #    self.new_signup_window.show()
-
-   # def create_forgot_password_window(self):
-   #     self.new_forgo_pass_window = Forgo_Pass_Window()
-     #   self.new_forgo_pass_window.show()
+        
+    def create_signup_window(self):
+        self.new_signup_window = Signup_Window()
+        self.new_signup_window.show()
+    def create_forgot_password_window(self):
+           self.new_forgo_pass_window = Forgo_Pass_Window()
+           self.new_forgo_pass_window.show()
 
     def login_action(self):
         # ====== error logs ======
