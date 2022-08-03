@@ -34,7 +34,7 @@ class Window(QMainWindow):
         self.email_input.resize(260, 45)
         self.email_input.setPlaceholderText("Email")
         self.email_input.setStyleSheet(
-            "background:#ffffff; border:1px solid #a9a9a9;border-radius:3px;font-size:18px;")
+            "background:#CBC3E3; border:1px solid #a9a9a9;border-radius:3px;font-size:18px;")
         self.email_input.setFocus()
 
         self.password_input = QLineEdit(self)
@@ -42,7 +42,7 @@ class Window(QMainWindow):
         self.password_input.resize(260, 45)
         self.password_input.setPlaceholderText("Password")
         self.password_input.setStyleSheet(
-            "background:#ffffff; border:1px solid #a9a9a9;border-radius:3px;font-size:18px;")
+            "background:#CBC3E3; border:1px solid #a9a9a9;border-radius:3px;font-size:18px;")
         self.password_input.setFocus()
 
         self.button_1 = QPushButton("Log In", self)
